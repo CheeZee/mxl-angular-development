@@ -1,0 +1,188 @@
+.CodeMirror {
+    height: 100%;
+    width: 100%;
+    border: 1px solid #eee;
+}
+
+.mxl-form-control .CodeMirror {
+    position: relative;
+    /* This prevents unwanted scrollbars from showing up on the body and wrapper in IE. */
+    overflow: hidden;
+    /* Copied from Bootstrap's textarea */
+    display: inline-block !important;
+    padding: 0 4 4 4 !important;
+    color: #555555 !important;
+    border: 1px solid #ccc !important;
+    -webkit-border-radius: 3px !important;
+    -moz-border-radius: 3px !important;
+    border-radius: 3px !important;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075) !important;
+    -webkit-transition: border linear 0.2s, box-shadow linear 0.2s !important;
+    -moz-transition: border linear 0.2s, box-shadow linear 0.2s !important;
+    -ms-transition: border linear 0.2s, box-shadow linear 0.2s !important;
+    -o-transition: border linear 0.2s, box-shadow linear 0.2s !important;
+    transition: border linear 0.2s, box-shadow linear 0.2s !important;
+}
+
+
+.mxl-form-control .CodeMirror-code {
+    margin: 3px 0px 3px 0px;
+}
+
+
+
+.mxl-form-control .CodeMirror-focused {
+    /* Copied from Bootstrap's textarea */
+    border-color: rgba(82, 168, 236, 0.8) !important;
+    outline: 0 !important;
+    outline: thin dotted \9 !important;    
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6) !important;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6) !important;
+}
+
+.CodeMirror-hintHelp {
+    width: 370px;
+    float: right;
+    padding: 1em 0 1em 1em;
+    max-height: 20em;
+    overflow-y: auto;
+}
+
+.CodeMirror-hintsDialog {
+    position: absolute;
+    z-index: 5000;
+    overflow: hidden;
+    -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+    -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+    box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+    border-radius: 3px;
+    border: 1px solid silver;
+    background: white;
+    font-size: 90%;
+    max-height: 23em;
+    width: 600px;
+    font-family: monospace;
+}
+
+    .CodeMirror-hintsDialog h4 {
+        font-size: 120%;
+        font-weight: bold;
+    }
+
+.cm-s-mxl span.cm-meta {
+    color: #FF1717;
+}
+
+.cm-s-mxl span.cm-keyword {
+    color: blue;
+}
+
+.cm-s-mxl span.cm-atom {
+    color: blue;
+}
+
+.cm-s-mxl span.cm-number {
+    color: orange;
+}
+
+.cm-s-mxl span.cm-def {
+    color: #00f;
+}
+
+.cm-s-mxl span.cm-variable {
+    color: black;
+}
+
+.cm-s-mxl span.cm-variable-2 {
+    color: #0000C0;
+}
+
+.cm-s-mxl span.cm-variable-3 {
+    color: #0000C0;
+}
+
+.cm-s-mxl span.cm-property {
+    color: black;
+}
+
+.cm-s-mxl span.cm-comment {
+    color: LimeGreen;
+}
+
+.cm-s-mxl span.cm-string {
+    color: red;
+}
+
+.cm-s-mxl span.cm-quoted {
+    color: gray;
+}
+
+.cm-s-mxl span.cm-string-2 {
+    color: #f50;
+}
+
+.cm-s-mxl span.cm-error {
+    color: #f00;
+}
+
+.cm-s-mxl span.cm-qualifier {
+    color: #555;
+}
+
+.cm-s-mxl span.cm-builtin {
+    color: #30a;
+}
+
+.cm-s-mxl span.cm-bracket {
+    color: #cc7;
+}
+
+.cm-s-mxl span.cm-tag {
+    color: #170;
+}
+
+.cm-s-mxl span.cm-attribute {
+    color: #00c;
+}
+
+.CodeMirror-matchingbracket {
+    border: 1px solid grey;
+    color: black !important;
+}
+
+.CodeMirror-focused .cm-matchhighlight {
+    font-weight: 900;
+}
+
+.mxl-result-panel {
+    padding: 5px;
+    margin-left: 17px;
+}
+
+.mxl-result-panel-close {
+    float: right;
+    margin-right: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+    .mxl-result-panel-close:before {
+        background: transparent;
+        border-radius: 3px;
+        color: #bbb;
+        content: '\00D7';
+        font-weight: 400;
+        height: 26px;
+        font-size: 26px;
+        top: -10px;
+        text-align: center;
+        position: relative;
+        width: 30px;
+    }
+
+    .mxl-result-panel-close:hover:before,
+    .mxl-result-panel-close:active:before {
+        color: #777;
+    }
