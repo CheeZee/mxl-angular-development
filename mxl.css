@@ -168,21 +168,25 @@
     cursor: pointer;
 }
 
-    .mxl-result-panel-close:before {
-        background: transparent;
-        border-radius: 3px;
-        color: #bbb;
-        content: '\00D7';
-        font-weight: 400;
-        height: 26px;
-        font-size: 26px;
-        top: -10px;
-        text-align: center;
-        position: relative;
-        width: 30px;
-    }
+.mxl-result-panel-close:before {
+    background: transparent;
+    border-radius: 3px;
+    color: #bbb;
+    content: '\00D7';
+    font-weight: 400;
+    height: 26px;
+    font-size: 26px;
+    top: -10px;
+    text-align: center;
+    position: relative;
+    width: 30px;
+}
 
-    .mxl-result-panel-close:hover:before,
-    .mxl-result-panel-close:active:before {
-        color: #777;
-    }
+.mxl-result-panel-close:hover:before,
+.mxl-result-panel-close:active:before {
+    color: #777;
+}
+
+.row-margin {
+    margin-top: 0px;
+}
