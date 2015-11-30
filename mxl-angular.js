@@ -19,9 +19,26 @@ angular.module('mxl', [])
                 runTest: '&mxlRuntest',
                 mode: '@mxlMode',
                 validateMxl: '&mxlValidate',
-                enableWizard: '=enableWizard'
+                enableWizard: '=enableWizard',
+                entityTypes: '=mxlEntities',
+                selectedEntity: '@'
             },
         link: function ($scope, $element, $attrs, ctrl) {
+            /*
+            * Below are the wizard related functions
+            */
+            // select the entity
+            $scope.selectEntity = function(){
+                event.preventDefault();
+                var e = document.querySelector('#entity');
+                $scope.selectedEntity = e.options[e.selectedIndex].innerText;
+            };
+            $scope.unselectEntity = function(){
+                $scope.selectedEntity = null;
+            }
+            /*
+            * Above are the wizard related functions
+            */
             function newCodemirrorEditor($element, codemirrorOptions) {
                 var codemirror;
                 if($scope.enableWizard == true){

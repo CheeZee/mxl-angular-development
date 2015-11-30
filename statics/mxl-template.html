@@ -16,8 +16,25 @@
                 <editor></editor>
             </div>
             <div id="wizard" class="tab-pane fade">
-                here is wizard
-                <input class="wizard" />
+                <div id="entity-selection-1" ng-show="selectedEntity == null">
+                    <div class="row">
+                        <div class="col-md-10">
+                            <select id="entity" class="form-control">
+                                <option selected>Please select an entity...</option>
+                                <option ng-repeat="entity in entityTypes">{{entity.name}}</option>
+                            </select>
+                        </div>
+                            <button class="btn btn-default" type="button" ng-click="selectEntity()">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </button>
+                    </div>
+                </div>
+                <div id="entity-selection-2" ng-hide="selectedEntity == null">
+                    <p>You have select {{selectedEntity}} to query the data.</p>
+                    <button class="btn btn-default" type="button" ng-click="unselectEntity()">
+                        Change Entity
+                    </button>
+                </div>
             </div>
         </div>
     </div>

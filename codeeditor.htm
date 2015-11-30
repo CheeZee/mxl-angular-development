@@ -74,9 +74,10 @@
                 <div class="col-md-6">
                     <h2>Try your Expression</h2>
                     
-                    <mxl-expression class="mxl-form-control" name="mxlValue" enable-wizard="true" ng-model="mxlValue" mxl-runtest="runTest(value)" mxl-validate="validate(modelValue, viewValue)" mxl-autocompletionhints="autoCompletionHints"></mxl-expression>
+                    <mxl-expression class="mxl-form-control" name="mxlValue" enable-wizard="true" mxl-entities="entities"
+                                    ng-model="mxlValue" mxl-runtest="runTest(value)" mxl-validate="validate(modelValue, viewValue)"
+                                    mxl-autocompletionhints="autoCompletionHints"></mxl-expression>
                     <span ng-show="form.mxlValue.$error.typeChecking">There is an MxL error</span>
-                   
                 </div>
                 <div class="col-md-1">
 

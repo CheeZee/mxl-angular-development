@@ -1,6 +1,6 @@
 ﻿var ceapp = angular.module('ceapp', ['sociocortex', 'mxl']);
 
-ceapp.controller('testController', function ($scope, scMxl, scAuth) {
+ceapp.controller('testController', function ($scope, scMxl, scAuth, scModel) {
 
     scAuth.login('sociocortex.sebis@tum.de', 'sebis');
     
@@ -29,4 +29,9 @@ ceapp.controller('testController', function ($scope, scMxl, scAuth) {
     $scope.validateParameters = function (modelValue, viewValue) {
         return scMxl.validate({workspace : { id : $scope.workspaceId}}, { parameterDefinitions: viewValue });
     };
+
+    scModel.EntityType.queryByWorkspace({ id: $scope.workspaceId }, function(entities){
+        $scope.entities = entities;
+    });
+
 });
