@@ -18,6 +18,10 @@ ceapp.controller('testController', function ($scope, scMxl, scAuth, scModel) {
         return scMxl.query({workspace : { id : $scope.workspaceId}}, { expression: value, expectedType: $scope.expectedType, parameterDefinitions: $scope.mxlParameters });
     };
 
+    $scope.wizard = function(expression){
+        return scMxl.query({workspace : { id : $scope.workspaceId}}, { expression: 'find ' + expression });
+    }
+
     $scope.validate = function (modelValue, viewValue) {
         return scMxl.validate({workspace : { id : $scope.workspaceId}}, { expression: viewValue, expectedType: $scope.expectedType, parameterDefinitions: $scope.mxlParameters });
     };
@@ -33,5 +37,6 @@ ceapp.controller('testController', function ($scope, scMxl, scAuth, scModel) {
     scModel.EntityType.queryByWorkspace({ id: $scope.workspaceId }, function(entities){
         $scope.entities = entities;
     });
+
 
 });

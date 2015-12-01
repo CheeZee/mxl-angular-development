@@ -16,7 +16,7 @@
                 <editor></editor>
             </div>
             <div id="wizard" class="tab-pane fade">
-                <div id="entity-selection-1" ng-show="selectedEntity == null">
+                <div class="entity-selection" ng-show="selectedEntity == null">
                     <div class="row row-margin">
                         <div class="col-md-10">
                             <select id="entity" class="form-control">
@@ -29,10 +29,10 @@
                             </button>
                     </div>
                 </div>
-                <div id="entity-selection-2" ng-hide="selectedEntity == null">
+                <div class="entity-selection" ng-hide="selectedEntity == null">
                     <div class="row row-margin">
                         <div class="col-md-8">
-                            <h4>You have selected <b>{{selectedEntity}}</b>.</h4>
+                            <h4>You have selected <b>{{selectedEntity.name}}</b>.</h4>
                         </div>
                         <div class="col-md-4">
                             <button class="btn btn-default" type="button" ng-click="unselectEntity()">
@@ -40,6 +40,9 @@
                             </button>
                         </div>
                     </div>
+                </div>
+                <div id="main-wizard">
+
                 </div>
             </div>
         </div>

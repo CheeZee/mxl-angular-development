@@ -6,6 +6,19 @@ angular.module('mxl', [])
     type: "type",
     parameteres: "parameters"
 })
+.directive('mxlIntermediate', function(){
+    // the directive for intermediate status, which is used in the mxlExpression directive's template
+    return{
+        templateUrl: 'statics/mxl-intermediate.html',
+        require: ["^ngModel"],
+        scope:
+            {
+                dataType: "=",
+                previewResults: "="
+            },
+        link: function($scope, $element, $attr){}
+    };
+})
 .directive('mxlExpression', function ($timeout, $q, mxlModes) {
     return {
         templateUrl: 'statics/mxl-template.html',
@@ -19,9 +32,11 @@ angular.module('mxl', [])
                 runTest: '&mxlRuntest',
                 mode: '@mxlMode',
                 validateMxl: '&mxlValidate',
+                // below are the attributes for the wizard
                 enableWizard: '=enableWizard',
                 entityTypes: '=mxlEntities',
-                selectedEntity: '@'
+                selectedEntity: '@',
+                wizard: '&mxlWizard'
             },
         link: function ($scope, $element, $attrs, ctrl) {
             /*
@@ -29,9 +44,21 @@ angular.module('mxl', [])
             */
             // select the entity
             $scope.selectEntity = function(){
-                event.preventDefault();
                 var e = document.querySelector('#entity');
-                $scope.selectedEntity = e.options[e.selectedIndex].innerText;
+                for(var i = 0; i < $scope.entityTypes.length; i++){
+                    var entity = $scope.entityTypes[i];
+                    if(entity.name === e.options[e.selectedIndex].innerText){
+                        $scope.selectedEntity = entity;
+                        break;
+                    }
+                }
+                $scope.intermediateResult = [];
+                if($scope.wizard){
+                    $scope.wizard({expression: $scope.selectedEntity.name}).then(function(result){
+                        $scope.intermediateResult.push(result.value);
+                    });
+                }
+
             };
             $scope.unselectEntity = function(){
                 $scope.selectedEntity = null;
