@@ -6,19 +6,6 @@ angular.module('mxl', [])
     type: "type",
     parameteres: "parameters"
 })
-.directive('mxlIntermediate', function(){
-    // the directive for intermediate status, which is used in the mxlExpression directive's template
-    return{
-        templateUrl: 'statics/mxl-intermediate.html',
-        require: ["^ngModel"],
-        scope:
-            {
-                dataType: "=",
-                previewResults: "="
-            },
-        link: function($scope, $element, $attr){}
-    };
-})
 .directive('mxlExpression', function ($timeout, $q, mxlModes) {
     return {
         templateUrl: 'statics/mxl-template.html',
@@ -36,8 +23,12 @@ angular.module('mxl', [])
                 enableWizard: '=enableWizard',
                 entityTypes: '=mxlEntities',
                 selectedEntity: '@',
-                wizard: '&mxlWizard'
+                wizard: '&mxlWizard',
+                intermediateResult: "@"
             },
+        controller: function($scope){
+            return $scope;
+        },
         link: function ($scope, $element, $attrs, ctrl) {
             /*
             * Below are the wizard related functions
@@ -52,10 +43,10 @@ angular.module('mxl', [])
                         break;
                     }
                 }
-                $scope.intermediateResult = [];
+                // initialize the intermediate result array
                 if($scope.wizard){
                     $scope.wizard({expression: $scope.selectedEntity.name}).then(function(result){
-                        $scope.intermediateResult.push(result.value);
+                        $scope.intermediateResult = [{type: "Sequence of " + $scope.selectedEntity.name, preview: result.value}];
                     });
                 }
 
@@ -307,4 +298,13 @@ angular.module('mxl', [])
             };
         }
     }
+})
+.directive('mxlIntermediate', function(){
+    // the directive for intermediate status, which is used in the mxlExpression directive's template
+    return{
+        templateUrl: 'statics/mxl-intermediate.html',
+        require: "^mxlExpression",
+        scope: false,
+        link: function($scope, $element, $attr){}
+    };
 });

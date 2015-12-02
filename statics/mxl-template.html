@@ -29,7 +29,7 @@
                             </button>
                     </div>
                 </div>
-                <div class="entity-selection" ng-hide="selectedEntity == null">
+                <div class="after-selection" ng-hide="selectedEntity == null">
                     <div class="row row-margin">
                         <div class="col-md-8">
                             <h4>You have selected <b>{{selectedEntity.name}}</b>.</h4>
@@ -40,10 +40,12 @@
                             </button>
                         </div>
                     </div>
-                </div>
-                <div id="main-wizard">
+                    <div id="main-wizard">
+                        <mxl-intermediate ng-repeat="results in intermediateResult"></mxl-intermediate>
+                    </div>
 
                 </div>
+
             </div>
         </div>
     </div>

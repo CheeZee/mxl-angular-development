@@ -1,6 +1,18 @@
-<div>
-    <h4>Data Type: {{ dataType }}</h4>
-    <div ng-repeat="result in previewResults">
-        {{ result.name }}
+<div class="row row-margin">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Data Type: <b>{{ results.type }}</b>
+                    <a class="pull-right collapsed" data-toggle="collapse" data-target="#preview-{{intermediateResult.indexOf(results)}}">
+                        <b>Preview</b>
+                    </a>
+                </h3>
+            </div>
+            <div id="preview-{{intermediateResult.indexOf(results)}}" class="panel-collapse collapse">
+                <div class="panel-body">
+                    <div ng-repeat="result in results.preview">{{ result.name }}</div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
