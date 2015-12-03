@@ -22,6 +22,7 @@ angular.module('mxl', [])
                 // below are the attributes for the wizard
                 enableWizard: '=enableWizard',
                 entityTypes: '=mxlEntities',
+                changingEntity: '@',
                 selectedEntity: '@',
                 wizard: '&mxlWizard',
                 intermediateResult: "@"
@@ -40,6 +41,7 @@ angular.module('mxl', [])
                     var entity = $scope.entityTypes[i];
                     if(entity.name === e.options[e.selectedIndex].innerText){
                         $scope.selectedEntity = entity;
+                        $scope.changingEntity = false;
                         break;
                     }
                 }
@@ -51,9 +53,13 @@ angular.module('mxl', [])
                 }
 
             };
-            $scope.unselectEntity = function(){
-                $scope.selectedEntity = null;
+            $scope.changeEntity = function(){
+                $scope.changingEntity = true;
+            };
+            $scope.cancelChange = function(){
+                $scope.changingEntity = false;
             }
+
             /*
             * Above are the wizard related functions
             */
