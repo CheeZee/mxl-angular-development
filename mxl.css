@@ -189,6 +189,8 @@
 
 .row-margin {
     margin-top: 0px;
+    margin-bottom: 0px;
+    padding: 15px 15px 15px 15px;
 }
 
 .panel-heading a:after {
@@ -200,3 +202,34 @@
 .panel-heading a.collapsed:after {
     content:"\e080";
 }
+
+.selection, #pro-editor{
+    background-color: #E2F7D1;
+}
+
+#pro-editor {
+    padding: 10px 10px 30px 10px;
+}
+
+.glyphicon-large {
+    font-size: 25px;
+    display:block;
+    text-align:center;
+    margin-top: 10px;
+    margin-left: 15px;
+}
+
+.tab-content {
+    border: 1px solid #ddd;
+    border-radius: 0px 0px 5px 5px;
+    padding: 0px;
+}
+
+.nav-pills {
+    margin-right: 0px;
+    border-top: 1px solid #ddd;
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+

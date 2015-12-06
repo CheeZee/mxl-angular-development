@@ -16,7 +16,7 @@
                 <editor></editor>
             </div>
             <div id="wizard" class="tab-pane fade">
-                <div class="entity-selection" ng-show="selectedEntity == null || changingEntity">
+                <div class="selection" ng-show="selectedEntity == null || changingEntity">
                     <div class="row row-margin">
                         <div class="col-md-8">
                             <select id="entity" class="form-control">
@@ -36,14 +36,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="after-selection" ng-hide="selectedEntity == null || changingEntity">
+                <div class="selection" ng-hide="selectedEntity == null || changingEntity">
                     <div class="row row-margin">
                         <div class="col-md-8">
                             <h4>You have selected <b>{{selectedEntity.name}}</b>.</h4>
                         </div>
                         <div class="col-md-4">
                             <button class="btn btn-default" type="button" ng-click="changeEntity()">
-                                Change Entity<i class="glyphicon glyphicon-pencil"></i>
+                                Change<i class="glyphicon glyphicon-pencil"></i>
                             </button>
                         </div>
                     </div>
