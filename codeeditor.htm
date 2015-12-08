@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="scripts/bootstrap/css/bootstrap-theme.css" />
     <link href="styles/app.css" rel="stylesheet" type="text/css" />
     <!-- jQuery -->
-    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script src="scripts/bootstrap/js/bootstrap.min.js"></script>
 
     <!-- app scripts and styles -->
@@ -77,7 +77,8 @@
                     <mxl-expression class="mxl-form-control" name="mxlValue" enable-wizard="true" mxl-entities="entities"
                                     mxl-wizard="wizard(expression)" ng-model="mxlValue" mxl-runtest="runTest(value)"
                                     mxl-validate="validate(modelValue, viewValue)"
-                                    mxl-autocompletionhints="autoCompletionHints"></mxl-expression>
+                                    mxl-autocompletionhints="autoCompletionHints"
+                                    wizard-method-autocompletion="wizardAutoCompletion"></mxl-expression>
                     <span ng-show="form.mxlValue.$error.typeChecking">There is an MxL error</span>
 
                 </div>

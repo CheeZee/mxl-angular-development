@@ -25,7 +25,8 @@ angular.module('mxl', [])
                 changingEntity: '@',
                 selectedEntity: '@',
                 wizard: '&mxlWizard',
-                intermediateResult: "@"
+                intermediateResult: "@",
+                wizardMethodAutocompletion: "="
             },
         controller: function($scope){
             return $scope;
@@ -39,7 +40,7 @@ angular.module('mxl', [])
                 var e = document.querySelector('#entity');
                 for(var i = 0; i < $scope.entityTypes.length; i++){
                     var entity = $scope.entityTypes[i];
-                    if(entity.name === e.options[e.selectedIndex].innerText){
+                    if(entity.name === e.options[e.selectedIndex].innerHTML){
                         $scope.selectedEntity = entity;
                         $scope.changingEntity = false;
                         break;
@@ -48,10 +49,14 @@ angular.module('mxl', [])
                 // initialize the intermediate result array
                 if($scope.wizard){
                     $scope.wizard({expression: $scope.selectedEntity.name}).then(function(result){
-                        console.log(result);
                         $scope.intermediateResult = [{type: result.type.fullname, preview: result.value}];
+                        // test please delete later!!!
+                        $scope.wizardMethodAutocompletion($scope.intermediateResult[0].type).then(function(result){
+                            console.log(result);
+                        });
                     });
                 }
+
 
             };
             $scope.changeEntity = function(){

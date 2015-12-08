@@ -22,6 +22,10 @@ ceapp.controller('testController', function ($scope, scMxl, scAuth, scModel) {
         return scMxl.query({workspace : { id : $scope.workspaceId}}, { expression: 'find ' + expression });
     }
 
+    $scope.wizardAutoCompletion = function(restrict){
+        return scMxl.autoComplete({workspace : { id : $scope.workspaceId}}, {restrict: restrict});
+    }
+
     $scope.validate = function (modelValue, viewValue) {
         return scMxl.validate({workspace : { id : $scope.workspaceId}}, { expression: viewValue, expectedType: $scope.expectedType, parameterDefinitions: $scope.mxlParameters });
     };
