@@ -13,7 +13,7 @@
             </div>
             <div id="preview-{{intermediateResult.indexOf(results)}}" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <div ng-repeat="result in results.preview">{{ result.name }}</div>
+                    <div ng-repeat="result in results.preview | limitTo: 5">{{ result.name }}</div>
                 </div>
             </div>
         </div>

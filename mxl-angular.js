@@ -48,7 +48,8 @@ angular.module('mxl', [])
                 // initialize the intermediate result array
                 if($scope.wizard){
                     $scope.wizard({expression: $scope.selectedEntity.name}).then(function(result){
-                        $scope.intermediateResult = [{type: "Sequence of " + $scope.selectedEntity.name, preview: result.value}];
+                        console.log(result);
+                        $scope.intermediateResult = [{type: result.type.fullname, preview: result.value}];
                     });
                 }
 
