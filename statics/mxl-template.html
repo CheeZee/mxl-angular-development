@@ -18,7 +18,7 @@
             <div id="wizard" class="tab-pane fade">
                 <div class="selection" ng-show="selectedEntity == null || changingEntity">
                     <div class="row row-margin">
-                        <div class="col-md-8">
+                        <div class="col-md-7">
                             <select id="entity" class="form-control">
                                 <option selected>Please select an entity...</option>
                                 <option ng-repeat="entity in entityTypes">{{entity.name}}</option>
@@ -49,7 +49,10 @@
                     </div>
                 </div>
                 <div id="main-wizard" ng-hide="intermediateResult == null">
-                    <mxl-intermediate ng-repeat="results in intermediateResult"></mxl-intermediate>
+                    <div ng-repeat="results in intermediateResult">
+                        <mxl-intermediate></mxl-intermediate>
+
+                    </div>
                 </div>
             </div>
         </div>

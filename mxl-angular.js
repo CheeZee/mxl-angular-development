@@ -52,7 +52,11 @@ angular.module('mxl', [])
                         $scope.intermediateResult = [{type: result.type.fullname, preview: result.value}];
                         // test please delete later!!!
                         $scope.wizardMethodAutocompletion($scope.intermediateResult[0].type).then(function(result){
-                            console.log(result);
+
+                            $scope.intermediateResult[0].autocompletion = result;
+                            console.log($scope.intermediateResult[0].autocompletion.memberFunctions);
+                            console.log($scope.intermediateResult[0].type);
+                            console.log($scope.intermediateResult[0].preview);
                         });
                     });
                 }
