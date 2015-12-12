@@ -23,7 +23,7 @@ ceapp.controller('testController', function ($scope, scMxl, scAuth, scModel) {
     }
 
     $scope.wizardAutoCompletion = function(restrict){
-        return scMxl.autoComplete({workspace : { id : $scope.workspaceId}}, {restrict: restrict});
+        return scMxl.autoComplete({workspace : { id : $scope.workspaceId}},  restrict);
     }
 
     $scope.validate = function (modelValue, viewValue) {

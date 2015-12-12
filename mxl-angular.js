@@ -26,7 +26,8 @@ angular.module('mxl', [])
                 selectedEntity: '@',
                 wizard: '&mxlWizard',
                 intermediateResult: "@",
-                wizardMethodAutocompletion: "="
+                wizardMethodAutocompletion: "=",
+                autoCompletionResults: '@'
             },
         controller: function($scope){
             return $scope;
@@ -52,11 +53,8 @@ angular.module('mxl', [])
                         $scope.intermediateResult = [{type: result.type.fullname, preview: result.value}];
                         // test please delete later!!!
                         $scope.wizardMethodAutocompletion($scope.intermediateResult[0].type).then(function(result){
-
-                            $scope.intermediateResult[0].autocompletion = result;
-                            console.log($scope.intermediateResult[0].autocompletion.memberFunctions);
-                            console.log($scope.intermediateResult[0].type);
-                            console.log($scope.intermediateResult[0].preview);
+                            console.log(result);
+                            $scope.intermediateResult[0].autoCompletion = result;
                         });
                     });
                 }
@@ -323,4 +321,19 @@ angular.module('mxl', [])
         scope: false,
         link: function($scope, $element, $attr){}
     };
+})
+
+
+
+.directive('mxlWizardMethods', function(){
+    //the directive which returns the methods which can be applied to a data type
+    return{
+        restrict: 'AE',
+        templateUrl: 'statics/mxl-wizard-methods.html',
+        require: "^mxlExpression",
+        scope: false,
+        link: function(scope, element, attrs){
+
+        }
+    }
 });
