@@ -1,0 +1,21 @@
+<div class="row row-margin">
+    <div class="col-md-12">
+        <select id="method-{{intermediateResult.indexOf(results)}}" class="form-control">
+            <option selected> Please select a method...</option>
+            <option ng-repeat="method in results.autoCompletion.memberFunctions">{{method.name}}</option>
+        </select>
+        <div class="row">
+            <div class="col-md-10">
+                <input type="text" class="form-control"> </input>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-default pull-right" type="button" ng-click="changeEntity()">
+                    Set
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
