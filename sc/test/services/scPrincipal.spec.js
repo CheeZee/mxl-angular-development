@@ -82,14 +82,14 @@ describe('scPrincipal', function () {
         });
 
         describe('write', function () {
-            it('editing username of thomas', function (done) {
-                scPrincipal.User.update({ id: 'thomas' }, { name: 'Chief Architect' }, function (thomas) {
-                    expect(thomas).toBeObject();
-                    expect(thomas.name).toEqual('Chief Architect');
+            it('editing username of me', function (done) {
+                scPrincipal.User.update({ id: 'me' }, { name: 'Chief Architect' }, function (max) {
+                    expect(max).toBeObject();
+                    expect(max.name).toEqual('Chief Architect');
 
-                    scPrincipal.User.update({ id: 'thomas' }, { name: 'Thomas Reschenhofer' }, function (thomas) {
-                        expect(thomas).toBeObject();
-                        expect(thomas.name).toEqual('Thomas Reschenhofer');
+                    scPrincipal.User.update({ id: 'me' }, { name: 'Max Mustermann' }, function (max) {
+                        expect(max).toBeObject();
+                        expect(max.name).toEqual('Max Mustermann');
 
                         done();
                     });

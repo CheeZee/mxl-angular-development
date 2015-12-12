@@ -12,29 +12,28 @@
         function autoComplete(p1, p2, p3, p4) {
             var context, restriction, callback, error;
 
-            if (angular.isObject(p1)) {
+            if (angular.isUndefined(p1) || angular.isObject(p1)) {
                 context = p1;
 
                 if (angular.isString(p2)) {
                     restriction = p2;
                     callback = p3;
                     error = p4;
-                } else {
+                }
+                else {
                     callback = p2;
                     error = p3;
                 }
-            } else if (angular.isString(p1)) {
-                restriciton = p1;
-                callback = p2;
-                error = p3;
-            } else if (angular.isFunction(p1)) {
-                callback = p1;
-                error = p2;
+
             } else {
-                context = p1;
-                restriction = p2;
-                callback = p3;
-                error = p4;
+                if (angular.isString(p1)) {
+                    restriciton = p1;
+                    callback = p2;
+                    error = p3;
+                } else {
+                    callback = p1;
+                    error = p2;
+                }
             }
 
             var cachedHints = autoCompleteCache.get(JSON.stringify(context));
@@ -70,20 +69,18 @@
         function query(p1, p2, p3, p4) {
             var context, data, callback, error;
 
-            if (angular.isObject(p1) && angular.isObject(p2)) {
+            if (angular.isObject(p2)) {
                 context = p1;
                 data = p2;
                 callback = p3;
                 error = p4;
-            } else if (angular.isObject(p1) && angular.isFunction(p2)) {
+            } else if (angular.isObject(p1)) {
                 data = p1;
                 callback = p2;
                 error = p3;
             } else {
-                context = p1;
-                restriction = p2;
-                callback = p3;
-                error = p4;
+                callback = p1;
+                error = p2;
             }
 
             var deferred = $q.defer();
@@ -111,25 +108,23 @@
         function validate(p1, p2, p3, p4) {
             var context, data, callback, error;
 
-            if (angular.isObject(p1) && angular.isObject(p2)) {
+            if (angular.isObject(p2)) {
                 context = p1;
                 data = p2;
                 callback = p3;
                 error = p4;
-            } else if (angular.isObject(p1) && angular.isFunction(p2)) {
+            } else if (angular.isObject(p1)) {
                 data = p1;
                 callback = p2;
                 error = p3;
             } else {
-                context = p1;
-                restriction = p2;
-                callback = p3;
-                error = p4;
+                callback = p1;
+                error = p2;
             }
 
             var deferred = $q.defer();
 
-            return mxlRequest({
+            mxlRequest({
                 httpMethod: 'POST',
                 context: context,
                 mxlMethod: 'mxlValidation',

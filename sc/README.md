@@ -9,35 +9,25 @@ After that, add the `sc-angular` module as a dependency to your application modu
 angular.module('myApp', ['sociocortex']);
 ```
 
-The module exposes angular services: `scCore`, `scCrud`, `scMxl`, `scUtils`.
+The module exposes angular services: `scData`, `scModel`, `scMxl`, `scAuth`, `scUtil`.
 
 (...)
 
 #### Authentication
-(...) `auth = { user: String, password: String }`
-
-#### API
-(...)
+    
+    scAuth.login("your username", "your password")
 
 ##### Examples
 
-    scCrud.users
-    .findSelf(auth)
-    .then(function (...
+    scData.Workspace.query()
+     .then(function (workspaces) {...]);
 
-    scCrud.types
-    .findAll(auth)
-    .then(function (...
+    scData.Entity.queryByEntityType({id: 'id of a type'})
+     .then(function (entities) {...});
     
-    scCrud.entities
-    .remove(auth, entity)
-    .then(function (...
-
-(...)
-
     scMxl
-    .query(auth, queryString, workspaceId)
-    .then(function (...
+    .query({expression: "find Customer"})
+    .then(function (result) {...});
 
 ### Build
     npm install

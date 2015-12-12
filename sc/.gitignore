@@ -4,3 +4,5 @@ typings
 .vs/
 *.sln
 *.suo
+.idea/
+*.iml

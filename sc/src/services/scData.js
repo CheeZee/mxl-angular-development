@@ -7,28 +7,24 @@
                 id: "@id"
             },
             {
-                update:
-                    {
-                        method: "PUT"
-                    },
-                queryByEntityType:
-                    {
-                        method: "GET",
-                        url: scUtil.getFullUrl(scUtil.paths.entityTypes + "/:id/" + scUtil.paths.entities),
-                        isArray: true
-                    },
-                queryByWorkspace:
-                    {
-                        method: "GET",
-                        url: scUtil.getFullUrl(scUtil.paths.workspaces + "/:id/" + scUtil.paths.entities),
-                        isArray: true
-                    },
-                getAttributes:
-                   {
-                       method: "GET",
-                       url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.attributes),
-                       isArray: true
-                   }
+                update: {
+                    method: "PUT"
+                },
+                queryByEntityType: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.entityTypes + "/:id/" + scUtil.paths.entities),
+                    isArray: true
+                },
+                queryByWorkspace: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.workspaces + "/:id/" + scUtil.paths.entities),
+                    isArray: true
+                },
+                getAttributes: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.attributes),
+                    isArray: true
+                }
             });
 
         // turns this: '{ "attributes": [{ "values": [ 18.4 ], "name": "Price", "type": "number" }]}'
@@ -45,9 +41,9 @@
             }
 
             function unwrapEntity(entity) {
-                
-                if(!entity.attributes){
-                    entity.attributes = {};                    
+
+                if (!entity.attributes) {
+                    entity.attributes = {};
                 }
 
                 if (angular.isArray(entity.attributes)) {
@@ -57,7 +53,7 @@
                     });
                     entity.attributes = unwrappedAttributes;
                 }
-                
+
                 return entity;
             }
         };
@@ -74,9 +70,9 @@
             } else {
                 return wrapEntity(x);
             }
-           
+
             function wrapEntity(entity) {
-                
+
                 if (!entity.attributes) {
                     entity.attributes = [];
                 }
@@ -84,8 +80,9 @@
                 if (angular.isObject(entity.attributes)) {
                     var wrappedAttributes = [];
                     angular.forEach(entity.attributes, function (value, name) {
-
-                        if (angular.isArray(value)) {
+                        if (angular.isUndefined(value) || value == null) {
+                            wrappedAttributes.push({ name: name, values: [] });
+                        } else if (angular.isArray(value)) {
                             wrappedAttributes.push({ name: name, values: value });
                         } else {
                             wrappedAttributes.push({ name: name, values: [value] });
@@ -102,51 +99,73 @@
         delete Entity.query;
 
         var Workspace = $resource(scUtil.getFullUrl(scUtil.paths.workspaces + "/:id"),
-           {
-               id: "@id"
-           },
-           {
-               update:
-                    {
-                        method: "PUT"
-                    },
-               getEntities:
-                   {
-                       method: "GET",
-                       url: scUtil.getFullUrl(scUtil.paths.workspaces + "/:id/" + scUtil.paths.entities),
-                       isArray: true
-                   },
-               getEntityTypes:
-                   {
-                       method: "GET",
-                       url: scUtil.getFullUrl(scUtil.paths.workspaces + "/:id/" + scUtil.paths.entityTypes),
-                       isArray: true
-                   }
-           });
+            {
+                id: "@id"
+            },
+            {
+                update: {
+                    method: "PUT"
+                },
+                getEntities: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.workspaces + "/:id/" + scUtil.paths.entities),
+                    isArray: true
+                },
+                getEntityTypes: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.workspaces + "/:id/" + scUtil.paths.entityTypes),
+                    isArray: true
+                }
+            });
 
         var Attribute = $resource(scUtil.getFullUrl(scUtil.paths.attributes + "/:id"),
-           {
-               id: "@id"
-           },
-           {
-               update:
-                    {
-                        method: "PUT"
-                    },
-               queryByEntity:
-                    {
-                        method: "GET",
-                        url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.attributes),
-                        isArray: true
-                    }
-           });
+            {
+                id: "@id"
+            },
+            {
+                update: {
+                    method: "PUT"
+                },
+                queryByEntity: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.attributes),
+                    isArray: true
+                }
+            });
 
         delete Attribute.query;
+
+        var Task = $resource(scUtil.getFullUrl(scUtil.paths.tasks + "/:id"),
+            {
+                id: "@id"
+            },
+            {
+                update: {
+                    method: "PUT"
+                },
+                getAttributes: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.tasks + "/:id/" + scUtil.paths.attributes),
+                    isArray: true
+                }
+            });
+
+        var Expertise = $resource(scUtil.getFullUrl(scUtil.paths.expertises + "/:id"),
+            {
+                id: "@id"
+            },
+            {
+                update: {
+                    method: "PUT"
+                }
+            });
 
         return {
             Entity: Entity,
             Workspace: Workspace,
-            Attribute: Attribute
+            Attribute: Attribute,
+            Task: Task,
+            Expertise: Expertise
         };
     }]);
 })();

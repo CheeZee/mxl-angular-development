@@ -189,6 +189,7 @@ describe('scData (write access)', function () {
                     expect(schnitzel.attributes.Calories).toBeNumber();
                     expect(schnitzel.attributes["Favorite by"]).toBeArrayOfObjects();
                     expect(schnitzel.attributes["Invented at"]).toBeIso8601();
+                    expect(new Date(schnitzel.attributes["Invented at"])).toEqual(new Date(1500, 1, 1));
                     expect(schnitzel.attributes["For beginners"]).toBeBoolean();
 
                     scData.Entity.delete(schnitzel, function (result) {
