@@ -1,0 +1,53 @@
+.CodeMirror-hints {
+    list-style: none;
+    margin: 0;
+    padding: 2px;
+    max-height: 20em;
+    overflow-y: auto;
+}
+
+
+
+li.CodeMirror-hint {
+    margin: 0;
+    padding: 0 4px;
+    border-radius: 2px;
+    max-width: 19em;
+    overflow: hidden;
+    white-space: pre;
+    color: black;
+    cursor: pointer;
+}
+
+
+    li.CodeMirror-hint.mxl-keyword {
+        color: blue;
+    }
+
+    li.CodeMirror-hint.mxl-function {
+        color: black;
+    }
+
+    li.CodeMirror-hint.mxl-type {
+        color: #339933;
+    }
+
+    li.CodeMirror-hint.mxl-attribute {
+        color: #990066;
+    }
+
+    li.CodeMirror-hint.mxl-previous {
+        color: gray;
+    }
+
+    li.CodeMirror-hint.mxl-identifier {
+        color: black;
+    }
+
+    li.CodeMirror-hint.mxl-package {
+        color: #FF3333;
+    }
+
+li.CodeMirror-hint-active {
+    background: #ddd;
+}
