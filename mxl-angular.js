@@ -21,13 +21,14 @@ angular.module('mxl', [])
                 validateMxl: '&mxlValidate',
                 // below are the attributes for the wizard
                 enableWizard: '=enableWizard',
-                entityTypes: '=mxlEntities',
+                entities: '=mxlEntities',
                 changingEntity: '@',
                 selectedEntity: '@',
                 wizard: '&mxlWizard',
-                intermediateResult: "@",
-                wizardMethodAutocompletion: "=",
-                autoCompletionResults: '@'
+                intermediateResults: "@",
+                wizardMethodAutocompletion: "&mxlWizardMethod",
+                wizardConfig: '=',
+                addFunction: '@'
             },
         controller: function($scope){
             return $scope;
@@ -38,36 +39,139 @@ angular.module('mxl', [])
             */
             // select the entity
             $scope.selectEntity = function(){
+                // get the selected entity
                 var e = document.querySelector('#entity');
-                for(var i = 0; i < $scope.entityTypes.length; i++){
-                    var entity = $scope.entityTypes[i];
-                    if(entity.name === e.options[e.selectedIndex].innerHTML){
-                        $scope.selectedEntity = entity;
-                        $scope.changingEntity = false;
-                        break;
-                    }
-                }
+                var index = e.options[e.selectedIndex].value;
+                $scope.selectedEntity = $scope.entities[index];
+                $scope.changingEntity = false;
+
                 // initialize the intermediate result array
                 if($scope.wizard){
-                    $scope.wizard({expression: $scope.selectedEntity.name}).then(function(result){
-                        $scope.intermediateResult = [{type: result.type.fullname, preview: result.value}];
-                        // test please delete later!!!
-                        $scope.wizardMethodAutocompletion($scope.intermediateResult[0].type).then(function(result){
-                            console.log(result);
-                            $scope.intermediateResult[0].autoCompletion = result;
-                        });
+                    $scope.wizardQuery = ["find " + $scope.selectedEntity.name];
+                    $scope.wizard({expression: $scope.wizardQuery[0]}).then(function(result){
+                        $scope.intermediateResults = [{type: result.type.fullname, preview: result.value}];
                     });
                 }
-
-
-            };
+                // set the codemirror content
+                $scope.codemirror.setValue( $scope.wizardQuery[0]);
+             };
             $scope.changeEntity = function(){
                 $scope.changingEntity = true;
             };
             $scope.cancelChange = function(){
                 $scope.changingEntity = false;
             }
+            // add a new function
+            $scope.addFunction = function(){
+                var index = $scope.intermediateResults.length - 1;
+                // initialized the corresponding methods
+                if($scope.wizardMethodAutocompletion && $scope.intermediateResults != null){
+                    $scope.wizardMethodAutocompletion({restrict: $scope.intermediateResults[index].type}).then(function(result){
+                        $scope.intermediateResults[index].functions = result.memberFunctions;
+                    });
+                }
+                $scope.intermediateResults[index].config = {};
+            }
+            // when a function is selected
+            $scope.selectFunction = function(index){
+                var mandatoryParameter = 0;
+                var length = $scope.intermediateResults[index].config.selectedFunction.parameters.length;
+                for(var i = 0; i < length; i++){
+                    if($scope.intermediateResults[index].config.selectedFunction.parameters[i].isOptional == false){
+                        mandatoryParameter++;
+                    }
+                }
+                if(mandatoryParameter === 0){
+                    $scope.wizardQuery[index + 1] = "\n  ." + $scope.intermediateResults[index].config.selectedFunction.name + "()";
+                    var query = "";
+                    for(var i = 0; i < $scope.wizardQuery.length; i++){
+                        query += $scope.wizardQuery[i];
+                    }
+                    if($scope.wizard){
+                        $scope.wizard({expression: query}).then(function(result){
+                            $scope.intermediateResults[index + 1] = {type: result.type.fullname, preview: result.value};
+                            if(result.type.fullname === "Number"){
+                                $scope.endOfWizard = true;
+                            }else{
+                                $scope.endOfWizard = false;
+                            }
+                        });
+                    }
+                    // set the codemirror content
+                    $scope.codemirror.setValue(query);
+                }
+                $scope.intermediateResults[index].config.unfilledMandatoryParameters = mandatoryParameter;
+                $scope.intermediateResults[index].config.parameters = Array.apply(null, Array(length)).map(function () {});
 
+            }
+            // when a parameter is passed
+            $scope.setParameter = function($event, resIndex, paraIndex, isOptional){
+                console.log("intermediate results: ");
+                console.log($scope.intermediateResults);
+                if($event.keyCode === 13) {
+                    if (isOptional == false) {
+                        if ($scope.intermediateResults[resIndex].config.parameters[paraIndex] != "") {
+                            if($scope.intermediateResults[resIndex].config.unfilledMandatoryParameters > 0) {
+                                $scope.intermediateResults[resIndex].config.unfilledMandatoryParameters--;
+                            }
+                        }else{
+                            $scope.intermediateResults[resIndex].config.unfilledMandatoryParameters++;
+                        }
+                    }
+                    if ($scope.intermediateResults[resIndex].config.unfilledMandatoryParameters === 0) {
+                        $scope.wizardQuery[resIndex + 1] = "\n  ." + $scope.intermediateResults[resIndex].config.selectedFunction.name + "(";
+
+                        var length = $scope.intermediateResults[resIndex].config.parameters.length;
+                        for (var i = 0; i < length; i++) {
+                            if ($scope.intermediateResults[resIndex].config.parameters[i] != null) {
+                                if (i === 0) {
+                                    $scope.wizardQuery[resIndex + 1] += $scope.intermediateResults[resIndex].config.parameters[i];
+                                } else {
+                                    $scope.wizardQuery[resIndex + 1] += "," + $scope.intermediateResults[resIndex].config.parameters[i];
+                                }
+                            }
+                        }
+                        $scope.wizardQuery[resIndex + 1] += ")";
+                        console.log("query part"+resIndex+":"+$scope.wizardQuery[resIndex + 1]);
+                        var query = "";
+                        for(var i = 0; i < $scope.wizardQuery.length; i++){
+                            query +=  $scope.wizardQuery[i];
+                        }
+                        // set the codemirror content
+                        $scope.codemirror.setValue(query);
+                        console.log(query);
+                        $scope.wizard({expression: query}).then(function (result) {
+                            generateIntermediateResult(result, resIndex);
+                        }, function (result) {
+                            generateIntermediateResult(result, resIndex);
+                        });
+                    }
+                }
+            }
+            function generateIntermediateResult(result, index){
+                // when there is an error
+                if(result.statusCode >= 400){
+                    if($scope.intermediateResults[index + 1] != null){
+                        $scope.intermediateResults.splice(-1, 1);
+                    }
+                    $scope.wizardError = result.message;
+                }else { // no error
+                    if($scope.wizardError != null){
+                        $scope.wizardError = null
+                    }
+                    // PROBLEM!!!!!
+                    // it doesn't generate the following selected functions
+                    $scope.intermediateResults[index + 1] = {
+                        type: result.type.fullname,
+                        preview: result.value
+                    };
+                    if (result.type.fullname === "Number") {
+                        $scope.endOfWizard = true;
+                    }else{
+                        $scope.endOfWizard = false;
+                    }
+                }
+            }
             /*
             * Above are the wizard related functions
             */
@@ -143,15 +247,15 @@ angular.module('mxl', [])
 
                 var content = node.appendChild(document.createElement("span"));
 
-                if (result.status >= 400) {
-                    content.innerHTML = "<b>" + (result.data.cause ? result.data.cause : "Error") + "</b><br/>"
-                    content.innerHTML += result.data.message;
-                    node.className += " alert alert-" + (result.data.cause === "MxLEvaluationException" ? "warning" : "danger");
-                    updateLints(result.data);
+                if (result.statusCode >= 400) {
+                    content.innerHTML = "<b>" + (result.cause ? result.cause : "Error") + "</b><br/>"
+                    content.innerHTML += result.message;
+                    node.className += " alert alert-" + (result.cause === "MxLEvaluationException" ? "warning" : "danger");
+                    updateLints(result.value);
                 } else {
                     node.className += " alert alert-success";
                     content.innerHTML = "<b>Test result:</b><br/>"
-                    content.innerHTML += "" + JSON.stringify(result.message, null, 2);
+                    content.innerHTML += "" + JSON.stringify(result.value, null, 2);
                 }
 
                 if ($scope.testResultWidget) {
@@ -285,7 +389,6 @@ angular.module('mxl', [])
             if ($scope.runTest) {
                 codemirrorOptions.extraKeys["Ctrl-Enter"] = function (cm) {
                     removeCurrentTestPanel();
-
                     $scope.codemirror.forcedModelUpdate();
                     $q.when($scope.runTest({ value: cm.getValue() }))
                     .then(function (response) {
@@ -322,9 +425,6 @@ angular.module('mxl', [])
         link: function($scope, $element, $attr){}
     };
 })
-
-
-
 .directive('mxlWizardMethods', function(){
     //the directive which returns the methods which can be applied to a data type
     return{

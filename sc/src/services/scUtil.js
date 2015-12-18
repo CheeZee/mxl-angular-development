@@ -13,6 +13,7 @@
             isEntity: isOfType(paths.entities),
             isTask: isOfType(paths.tasks),
             isAttribute: isOfType(paths.attributes),
+            isFile: isOfType(paths.files),
             isEntityType: isOfType(paths.entityTypes),
             isTaskDefinition: isOfType(paths.taskDefinitions),
             isAttributeDefinition: isOfType(paths.attributeDefinitions),
@@ -72,6 +73,7 @@
             return {
                 entities: 'entities',
                 attributes: 'attributes',
+                files: 'files',
                 entityTypes: 'entityTypes',
                 attributeDefinitions: 'attributeDefinitions',
                 workspaces: 'workspaces',

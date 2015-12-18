@@ -3,15 +3,12 @@
 ceapp.controller('testController', function ($scope, scMxl, scAuth, scModel) {
 
     scAuth.login('sociocortex.sebis@tum.de', 'sebis');
-    
-    $scope.expectedType = 'Number';
-    $scope.mxlParameters = 'list:Sequence<Customer>, map:Function<Customer,Number>';
-    $scope.mxlValue = 'find Customer.average(Turnover)';
+
     $scope.workspaceId = '107yhdgc7q9u6';
 
 
     scMxl.autoComplete( $scope.workspaceId).then(function (response) {
-        $scope.autoCompletionHints = response.data;
+        $scope.autoCompletionHints = response;
     });
 
     $scope.runTest = function (value) {
@@ -19,7 +16,7 @@ ceapp.controller('testController', function ($scope, scMxl, scAuth, scModel) {
     };
 
     $scope.wizard = function(expression){
-        return scMxl.query({workspace : { id : $scope.workspaceId}}, { expression: 'find ' + expression });
+        return scMxl.query({workspace : { id : $scope.workspaceId}}, { expression: expression });
     }
 
     $scope.wizardAutoCompletion = function(restrict){

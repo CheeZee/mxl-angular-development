@@ -1,19 +1,29 @@
-<div class="row row-margin">
-    <div class="col-md-1">
-        <span><i class="glyphicon glyphicon-arrow-down glyphicon-large"></i></span>
-    </div>
-    <div class="col-md-11   ">
-        <div class="panel panel-default">
+<div class="row intermediate">
+    <div class="col-md-12 intermediate">
+        <div class="panel panel-default intermediate">
             <div class="panel-heading">
-                <h3 class="panel-title">Data Type: <b>{{ results.type }}</b>
-                    <a class="pull-right collapsed" data-toggle="collapse" data-target="#preview-{{intermediateResult.indexOf(results)}}">
+                <h3 class="panel-title">
+                    <span class="pull-left"><i class="glyphicon glyphicon-arrow-down glyphicon-large"></i></span>
+                    Data Type: <b>{{ result.type }}</b>
+                    <a class="pull-right collapsed" data-toggle="collapse" data-target="#preview-{{$index}}">
                         <b>Preview</b>
                     </a>
                 </h3>
             </div>
-            <div id="preview-{{intermediateResult.indexOf(results)}}" class="panel-collapse collapse">
+            <div id="preview-{{$index}}" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <div ng-repeat="result in results.preview | limitTo: 5">{{ result.name }}</div>
+                    <div ng-if="result.type.lastIndexOf('Sequence', 0) === 0">
+                        <ul>
+                            <li  ng-repeat="item in result.preview | limitTo: 5">
+                                <span ng-if="item.name">{{ item.name }}</span>
+                                <span ng-if="!item.name">{{item}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div ng-if="result.type === 'Number'">
+                        {{ result.preview }}
+                    </div>
+
                 </div>
             </div>
         </div>

@@ -97,4 +97,67 @@ describe('scModel (write access)', function () {
         });
         }, MAX_TIME_MS);
     });
+
+    describe('attributeDefinitions', function () {
+        it('Create, edit, and delete additional info attribute definition for product', function (done) {
+            scModel.AttributeDefinition.save({ name: 'Additional information', entityType: { id: 'nwproduct' } }, function (ai) {
+                expect(ai).toBeDefined();
+                expect(ai.name).toEqual('Additional information');
+                expect(ai.multiplicity).toEqual('maximalOne');
+                expect(ai.options).toBeUndefined();
+                expect(ai.attributeType).toBeUndefined();
+
+                scModel.AttributeDefinition.update(ai, { multiplicity: 'any' }, function (ai) {
+                    expect(ai).toBeDefined();
+                    expect(ai.name).toEqual('Additional information');
+                    expect(ai.multiplicity).toEqual('any');
+                    expect(ai.options).toBeUndefined();
+                    expect(ai.attributeType).toBeUndefined();
+
+                    scModel.AttributeDefinition.update(ai, { attributeType: 'Link', options: { entityType: { id: 'nwproduct' } } }, function (ai) {
+                        expect(ai).toBeDefined();
+                        expect(ai.name).toEqual('Additional information');
+                        expect(ai.multiplicity).toEqual('any');
+                        expect(ai.options).toBeDefined();
+                        expect(ai.options.entityType.id).toEqual('nwproduct');
+                        expect(ai.options.resourceType).toEqual('entities');
+                        expect(ai.attributeType).toBeDefined();
+                        expect(ai.attributeType).toEqual('Link');
+
+                        scModel.AttributeDefinition.update(ai, { attributeType: null }, function (ai) {
+                            expect(ai).toBeDefined();
+                            expect(ai.name).toEqual('Additional information');
+                            expect(ai.multiplicity).toEqual('any');
+                            expect(ai.options).toBeUndefined();
+                            expect(ai.attributeType).toBeUndefined();
+
+                            scModel.AttributeDefinition.delete(ai, function (result) {
+                                expect(result.success).toBeTrue();
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        }, MAX_TIME_MS);
+
+        it('Create, edit, and delete JSON attribute definition for supplier', function (done) {
+            var def = 'Structure<Street:String, PostalCode:String, City:String>';
+
+            scModel.AttributeDefinition.save({ name: 'Address', entityType: { id: 'nwsupplier' }, multiplicity:'exactlyOne', attributeType: 'json', options: { jsonTypeDefinition: def }}, function (address) {
+                expect(address).toBeDefined();
+                expect(address.name).toEqual('Address');
+                expect(address.multiplicity).toEqual('exactlyOne');
+                expect(address.options).toBeDefined();
+                expect(address.options.jsonTypeDefinition).toBeDefined();
+                expect(address.options.jsonTypeDefinition).toEqual(def);
+
+                scModel.AttributeDefinition.delete(address, function (result) {
+                    expect(result.success).toBeTrue();
+                    done();
+                });
+               
+        });
+        }, MAX_TIME_MS);
+    });
 });

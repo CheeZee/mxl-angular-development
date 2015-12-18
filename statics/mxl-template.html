@@ -20,8 +20,8 @@
                     <div class="row row-margin">
                         <div class="col-md-7">
                             <select id="entity" class="form-control">
-                                <option selected>Please select an entity...</option>
-                                <option ng-repeat="entity in entityTypes">{{entity.name}}</option>
+                                <option selected>--Please select an entity--</option>
+                                <option ng-repeat="entity in entities" value="{{$index}}">{{entity.name}}</option>
                             </select>
                         </div>
                         <div class="col-md-2">
@@ -48,17 +48,19 @@
                         </div>
                     </div>
                 </div>
-                <div id="main-wizard" ng-hide="intermediateResult == null">
-                    <div ng-repeat="results in intermediateResult">
+                <div id="main-wizard" ng-hide="intermediateResults == null">
+                    <div ng-repeat="result in intermediateResults">
                         <mxl-intermediate></mxl-intermediate>
-                        <div class="selection">
+                        <div class="selection" ng-hide="result.functions == null">
                             <mxl-wizard-methods></mxl-wizard-methods>
                         </div>
+                    </div>
+                    <div class="selection" ng-hide="intermediateResults == null || endOfWizard" >
+                        <img class="add-button" alt="Add a function" title="Add a function"
+                             src="statics/images/add-button.png" ng-click="addFunction()">
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-

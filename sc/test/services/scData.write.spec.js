@@ -92,6 +92,67 @@ describe('scData (write access)', function () {
             });
         }, MAX_TIME_MS);
 
+        it('update address of Thomas Hardy', function (done) {
+
+            scData.Entity.get({ id: 'hardy' }, function (hardy) {
+                angular.forEach(hardy.attributes, function (attr) {
+                    expect(attr.validationErrors).toBeUndefined();
+                });
+
+                scData.Entity.objectifyAttributes(hardy);
+
+                expect(hardy.attributes.Address).toBeDefined();
+                expect(hardy.attributes.Address.postalCode).toBeDefined();
+                expect(hardy.attributes.Address.postalCode).toEqual('85748');
+
+                hardy.attributes.Address.postalCode = 15;
+
+                scData.Entity.update(hardy, { attributes: [{ name: 'Address', values: [hardy.attributes.Address] }] }, function (hardy) {
+                    angular.forEach(hardy.attributes, function (attr) {
+                        if (attr.name === 'Address') {
+                            expect(attr.validationErrors).toBeDefined();
+                            expect(attr.validationErrors).toBeArrayOfSize(1);
+                        } else {
+                            expect(attr.validationErrors).toBeUndefined();
+                        }
+                    });
+
+                    scData.Entity.objectifyAttributes(hardy);
+
+                    expect(hardy.attributes.Address).toBeDefined();
+                    expect(hardy.attributes.Address.postalCode).toBeDefined();
+                    expect(hardy.attributes.Address.postalCode).toEqual(15);
+
+                    hardy.attributes.Address.postalCode = '85748';
+
+                    scData.Entity.update(hardy, { attributes: [{ name: 'Address', values: [hardy.attributes.Address] }] }, function (hardy) {
+                        angular.forEach(hardy.attributes, function (attr) {
+                            expect(attr.validationErrors).toBeUndefined();
+                        });
+
+                        scData.Entity.objectifyAttributes(hardy);
+                        expect(hardy.attributes.Address).toBeDefined();
+                        expect(hardy.attributes.Address.postalCode).toBeDefined();
+                        expect(hardy.attributes.Address.postalCode).toEqual('85748');
+
+                        done();
+                    });
+                });
+
+            });
+
+            scData.Entity.update({ id: "" }, { attributes: [{ name: "Price", values: [50] }] }, function (tofu1) {
+                tofu1 = scData.Entity.objectifyAttributes(tofu1);
+                expect(tofu1.attributes.Price).toEqual(50);
+
+                scData.Entity.update({ id: "tofu" }, { attributes: [{ name: "Price", values: [23.25] }] }, function (tofu2) {
+                    tofu2 = scData.Entity.objectifyAttributes(tofu2);
+                    expect(tofu2.attributes.Price).toEqual(23.25);
+                    done();
+                });
+            });
+        }, MAX_TIME_MS);
+
         it('update category of Tofu', function (done) {
 
             scData.Entity.get({ id: 'seafood' }, function (seafood) {
@@ -166,8 +227,6 @@ describe('scData (write access)', function () {
 
                 schnitzel = scData.Entity.objectifyAttributes(schnitzel);
 
-                log(schnitzel);
-
                 expect(schnitzel.attributes).toBeObject();
                 expect(schnitzel.attributes.Price).toBeNumber();
                 expect(schnitzel.attributes.Category.name).toBeString();
@@ -177,13 +236,11 @@ describe('scData (write access)', function () {
                         { name: 'Calories', values: [1500] },
                         { name: 'Favorite by', values: [{ id: 'hardy' }, { id: 'ashworth' }] },
                         { name: 'Invented at', values: [new Date(1500, 1, 1)] },
-                        {name:'For beginners', values:[true]}
+                        { name: 'For beginners', values: [true] }
                     ]
                 }, function (schnitzel) {
 
                     schnitzel = scData.Entity.objectifyAttributes(schnitzel);
-                    
-                    log(schnitzel);
 
                     expect(schnitzel.attributes).toBeObject();
                     expect(schnitzel.attributes.Calories).toBeNumber();
@@ -282,12 +339,10 @@ describe('scData (write access)', function () {
                             done();
                         });
                     });
-
                 });
-
-
             });
 
         }, MAX_TIME_MS);
     });
+
 });

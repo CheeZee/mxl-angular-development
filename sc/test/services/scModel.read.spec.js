@@ -36,7 +36,7 @@ describe('scModel (read access)', function () {
                 expect(customer.workspace.id).toEqual('northwind');
                 expect(customer.namePlural).toEqual('Customers');
                 expect(customer.attributeDefinitions).toBeArrayOfObjects();
-                expect(customer.attributeDefinitions).toBeArrayOfSize(4);
+                expect(customer.attributeDefinitions).toBeArrayOfSize(6);
 
                 done();
             });
@@ -48,7 +48,7 @@ describe('scModel (read access)', function () {
         it('Retrieving all attribute definition of the Customer type', function (done) {
             scModel.AttributeDefinition.queryByEntityType({ id: 'nwcustomer' }, function (attributeDefinitions) {
                 expect(attributeDefinitions).toBeArrayOfObjects();
-                expect(attributeDefinitions).toBeArrayOfSize(4);
+                expect(attributeDefinitions).toBeArrayOfSize(6);
 
                 done();
             });

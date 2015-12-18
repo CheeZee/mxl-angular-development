@@ -24,6 +24,11 @@
                     method: "GET",
                     url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.attributes),
                     isArray: true
+                },
+                getFiles: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.files),
+                    isArray: true
                 }
             });
 
@@ -135,6 +140,27 @@
 
         delete Attribute.query;
 
+        var File = $resource(scUtil.getFullUrl(scUtil.paths.files + "/:id"),
+            {
+                id: "@id"
+            },
+            {
+                update: {
+                    method: "PUT"
+                },
+                queryByEntity: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.files),
+                    isArray: true
+                },
+                download: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.files + "/:id/content")
+                }
+            });
+
+        delete File.query;
+
         var Task = $resource(scUtil.getFullUrl(scUtil.paths.tasks + "/:id"),
             {
                 id: "@id"
@@ -162,6 +188,7 @@
 
         return {
             Entity: Entity,
+            File: File,
             Workspace: Workspace,
             Attribute: Attribute,
             Task: Task,

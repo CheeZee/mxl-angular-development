@@ -122,6 +122,11 @@
                     method: "GET",
                     url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.attributes),
                     isArray: true
+                },
+                getFiles: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.files),
+                    isArray: true
                 }
             });
 
@@ -233,6 +238,27 @@
 
         delete Attribute.query;
 
+        var File = $resource(scUtil.getFullUrl(scUtil.paths.files + "/:id"),
+            {
+                id: "@id"
+            },
+            {
+                update: {
+                    method: "PUT"
+                },
+                queryByEntity: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.entities + "/:id/" + scUtil.paths.files),
+                    isArray: true
+                },
+                download: {
+                    method: "GET",
+                    url: scUtil.getFullUrl(scUtil.paths.files + "/:id/content")
+                }
+            });
+
+        delete File.query;
+
         var Task = $resource(scUtil.getFullUrl(scUtil.paths.tasks + "/:id"),
             {
                 id: "@id"
@@ -260,6 +286,7 @@
 
         return {
             Entity: Entity,
+            File: File,
             Workspace: Workspace,
             Attribute: Attribute,
             Task: Task,
@@ -342,26 +369,47 @@
         function autoComplete(p1, p2, p3, p4) {
             var context, restriction, callback, error;
 
-            if (angular.isString(p2)) {
+            if (angular.isUndefined(p1) || angular.isObject(p1)) {
                 context = p1;
-                restriction = p2;
-                callback = p3;
-                error = p4;
-            } else if (angular.isString(p1)) {
-                restriciton = p1;
-                callback = p2;
-                error = p3;
+
+                if (angular.isString(p2)) {
+                    restriction = p2;
+                    callback = p3;
+                    error = p4;
+                }
+                else {
+                    callback = p2;
+                    error = p3;
+                }
+
             } else {
-                callback = p1;
-                error = p2;
+                if (angular.isString(p1)) {
+                    restriciton = p1;
+                    callback = p2;
+                    error = p3;
+                } else {
+                    callback = p1;
+                    error = p2;
+                }
             }
 
-            var cachedHints = autoCompleteCache.get(JSON.stringify(context));
+            var cacheKey = "hints";
+
+            if (context) {
+                cacheKey += "#" + JSON.stringify(context);
+            }
+
+            if (restriction) {
+                cacheKey += "#" + restriction;
+            }
+
+            var cachedHints = autoCompleteCache.get(cacheKey);
 
             var deferred = $q.defer();
 
             if (cachedHints) {
-                return deferred.resolve(cachedHints);
+                deferred.resolve(cachedHints);
+                return deferred.promise;
             }
 
             mxlRequest({
@@ -370,7 +418,7 @@
                 mxlMethod: 'mxlAutoCompletionHints',
                 params: { restrict: restriction }
             }, function (res) {
-                autoCompleteCache.put(JSON.stringify(context), res);
+                autoCompleteCache.put(cacheKey, res);
 
                 if (callback && angular.isFunction(callback)) {
                     res = callback(res);
@@ -557,6 +605,7 @@
             isEntity: isOfType(paths.entities),
             isTask: isOfType(paths.tasks),
             isAttribute: isOfType(paths.attributes),
+            isFile: isOfType(paths.files),
             isEntityType: isOfType(paths.entityTypes),
             isTaskDefinition: isOfType(paths.taskDefinitions),
             isAttributeDefinition: isOfType(paths.attributeDefinitions),
@@ -616,6 +665,7 @@
             return {
                 entities: 'entities',
                 attributes: 'attributes',
+                files: 'files',
                 entityTypes: 'entityTypes',
                 attributeDefinitions: 'attributeDefinitions',
                 workspaces: 'workspaces',

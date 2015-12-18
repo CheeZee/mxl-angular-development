@@ -1,21 +1,39 @@
 <div class="row row-margin">
     <div class="col-md-12">
-        <select id="method-{{intermediateResult.indexOf(results)}}" class="form-control">
-            <option selected> Please select a method...</option>
-            <option ng-repeat="method in results.autoCompletion.memberFunctions">{{method.name}}</option>
+        <select id="method-{{$index}}" class="form-control"
+                ng-model="result.config.selectedFunction"
+                ng-change="selectFunction($index)"
+                ng-options="function.name for function in result.functions">
+            <option value=""> --Please select a method--</option>
         </select>
-        <div class="row">
-            <div class="col-md-10">
-                <input type="text" class="form-control"> </input>
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-default pull-right" type="button" ng-click="changeEntity()">
-                    Set
-                </button>
+    </div>
+</div>
+<div id="parameters-{{$index}}" ng-repeat="parameter in result.config.selectedFunction.parameters">
+    <div class="row row-margin" ng-if="parameter.isOptional == false" >
+        <div class="col-md-12">
+            <div class="form-group has-error" >
+                <label class="control-label" for="parameter-{{$index}}"><b>Mandatory</b> Parameter</label>
+                <input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
+                       ng-model="result.config.parameters[$index]"
+                       ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">
             </div>
         </div>
     </div>
-
-
-
+    <div class="row row-margin" ng-if="parameter.isOptional == true">
+        <div class="col-md-12">
+            <div class="form-group" >
+                <label class="control-label" for="parameter-{{$index}}"><b>Optional</b> Parameter</label>
+                <input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
+                       ng-model="result.config.parameters[$index]"
+                       ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row row-margin" ng-if="wizardError != null">
+    <div class="alert alert-danger" role="alert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Error:</span>
+        {{wizardError}}
+    </div>
 </div>

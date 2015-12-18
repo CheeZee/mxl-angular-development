@@ -192,6 +192,20 @@ describe('scData (read access)', function () {
             });
         });
 
+        describe('complex attributes type', function () {
+            it('gets address of Thomas Hardy', function (done) {
+                scData.Entity.get({ id: 'hardy', meta: "", attributes: "Address", content: false }, function (hardy) {
+                    scData.Entity.objectifyAttributes(hardy);
+
+                    expect(hardy.attributes).toBeObject();
+                    expect(hardy.attributes.Address).toBeObject();
+                    expect(hardy.attributes.Address.street).toEqual("Boltzmannstr. 3");
+
+                    done();
+                });
+            });
+        });
+
         it('objectify and arrayify attributes', function () {
             
             var entity = {
@@ -306,5 +320,41 @@ describe('scData (read access)', function () {
                 expect(scData.Attribute.query).toBeUndefined();
             });
         });
+    });
+
+    describe('files', function () {
+        it('Retrieving all picture of homepage', function (done) {
+            scData.Workspace.get({ id: 'northwind' }, function (northwind) {
+                expect(northwind.rootEntity).toBeObject();
+
+                scData.File.queryByEntity(northwind.rootEntity, function (files) {
+                    expect(files).toBeArrayOfSize(4);
+                    done();
+                });
+            });
+
+            scData.File.get({ id: 'northwindpng' }, function (northwindpng) {
+                expect(northwindpng.name).toEqual("NorthwindDataModel.png");
+                done();
+            });
+
+        }, MAX_TIME_MS);
+
+
+        it('Retrieving one picture', function (done) {
+            scData.File.get({ id: 'northwindpng' }, function (northwindpng) {
+                expect(northwindpng.name).toEqual("NorthwindDataModel.png");
+                done();
+            });
+
+        }, MAX_TIME_MS);
+
+        it('Download one picture', function (done) {
+            scData.File.download({ id: 'northwindpng' }, function (northwindpng) {
+                //expect(northwindpng).toBeDefined();
+                done();
+            });
+
+        }, MAX_TIME_MS);
     });
 });

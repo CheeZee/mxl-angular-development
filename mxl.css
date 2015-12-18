@@ -193,6 +193,11 @@
     padding: 15px 15px 15px 15px;
 }
 
+.intermediate {
+    margin: 0px;
+    padding: 0px;
+}
+
 .panel-heading a:after {
     font-family:'Glyphicons Halflings';
     content:"\e114";
@@ -207,16 +212,25 @@
     background-color: #E2F7D1;
 }
 
+.selection{
+    text-align: center;
+}
+
+.add-button{
+    display: block;
+    margin: 0 auto;
+    padding: 20px;
+    cursor: pointer;
+}
+
 #pro-editor {
     padding: 10px 10px 30px 10px;
 }
 
 .glyphicon-large {
-    font-size: 25px;
+    font-size: 20px;
     display:block;
-    text-align:center;
-    margin-top: 10px;
-    margin-left: 15px;
+    margin-right: 10px;
 }
 
 .tab-content {

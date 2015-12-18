@@ -32,7 +32,7 @@ describe('scPrincipal', function () {
             it('Retrieving all users', function (done) {
                 scPrincipal.User.query(function (users) {
                     expect(users).toBeArrayOfObjects();
-                    expect(users).toBeArrayOfSize(4);
+                    expect(users).toBeArrayOfSize(3);
 
                     done();
                 });
