@@ -11,7 +11,7 @@
 <div id="parameters-{{$index}}" ng-repeat="parameter in result.config.selectedFunction.parameters">
     <div class="row row-margin" ng-if="parameter.isOptional == false" >
         <div class="col-md-12">
-            <div class="form-group has-error" >
+            <div class="form-group" ng-class="{'has-error' : !result.config.parameters[$index] }" >
                 <label class="control-label" for="parameter-{{$index}}"><b>Mandatory</b> Parameter</label>
                 <input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
                        ng-model="result.config.parameters[$index]"
@@ -30,10 +30,10 @@
         </div>
     </div>
 </div>
-<div class="row row-margin" ng-if="wizardError != null">
+<div class="row row-margin" ng-if="result.wizardError != null">
     <div class="alert alert-danger" role="alert">
         <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
         <span class="sr-only">Error:</span>
-        {{wizardError}}
+        {{result.wizardError}}
     </div>
 </div>

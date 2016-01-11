@@ -82,11 +82,7 @@ angular.module('mxl', [])
                     }
                 }
                 if(mandatoryParameter === 0){
-                    $scope.wizardQuery[index + 1] = "\n  ." + $scope.intermediateResults[index].config.selectedFunction.name + "()";
-                    var query = "";
-                    for(var i = 0; i < $scope.wizardQuery.length; i++){
-                        query += $scope.wizardQuery[i];
-                    }
+                    var query = generateQuery(index, -1);
                     if($scope.wizard){
                         $scope.wizard({expression: query}).then(function(result){
                             $scope.intermediateResults[index + 1] = {type: result.type.fullname, preview: result.value};
@@ -106,8 +102,6 @@ angular.module('mxl', [])
             }
             // when a parameter is passed
             $scope.setParameter = function($event, resIndex, paraIndex, isOptional){
-                console.log("intermediate results: ");
-                console.log($scope.intermediateResults);
                 if($event.keyCode === 13) {
                     if (isOptional == false) {
                         if ($scope.intermediateResults[resIndex].config.parameters[paraIndex] != "") {
@@ -119,57 +113,139 @@ angular.module('mxl', [])
                         }
                     }
                     if ($scope.intermediateResults[resIndex].config.unfilledMandatoryParameters === 0) {
-                        $scope.wizardQuery[resIndex + 1] = "\n  ." + $scope.intermediateResults[resIndex].config.selectedFunction.name + "(";
 
-                        var length = $scope.intermediateResults[resIndex].config.parameters.length;
-                        for (var i = 0; i < length; i++) {
-                            if ($scope.intermediateResults[resIndex].config.parameters[i] != null) {
-                                if (i === 0) {
-                                    $scope.wizardQuery[resIndex + 1] += $scope.intermediateResults[resIndex].config.parameters[i];
-                                } else {
-                                    $scope.wizardQuery[resIndex + 1] += "," + $scope.intermediateResults[resIndex].config.parameters[i];
-                                }
-                            }
+                        // first check if it is a new parameter or an update
+                        if($scope.intermediateResults[resIndex + 1] != null){
+                            // when it is an update for existing configurations
+                            updateParameter(resIndex);
+                        }else {
+                            // when it is a new parameter
+                            var query = generateQuery(resIndex, -1);
+
+                            // set the codemirror content
+                            $scope.codemirror.setValue(query);
+
+                            $scope.wizard({expression: query}).then(function (result) {
+                                setNewIntermediateResult(result, resIndex);
+                            }, function (result) {
+                                setNewIntermediateResult(result, resIndex);
+                            });
                         }
-                        $scope.wizardQuery[resIndex + 1] += ")";
-                        console.log("query part"+resIndex+":"+$scope.wizardQuery[resIndex + 1]);
-                        var query = "";
-                        for(var i = 0; i < $scope.wizardQuery.length; i++){
-                            query +=  $scope.wizardQuery[i];
-                        }
-                        // set the codemirror content
-                        $scope.codemirror.setValue(query);
-                        console.log(query);
-                        $scope.wizard({expression: query}).then(function (result) {
-                            generateIntermediateResult(result, resIndex);
-                        }, function (result) {
-                            generateIntermediateResult(result, resIndex);
-                        });
                     }
                 }
             }
-            function generateIntermediateResult(result, index){
+
+            // this function is used to generate a query
+            // endIndex is used to generate only a part of the query
+            function generateQuery(resIndex, endIndex){
+                // if resIndex equals -1, no need to update the steps of the query
+                if(resIndex !== -1) {
+                    $scope.wizardQuery[resIndex + 1] = "\n  ." + $scope.intermediateResults[resIndex].config.selectedFunction.name + "(";
+
+                    var length = $scope.intermediateResults[resIndex].config.parameters.length;
+                    for (var i = 0; i < length; i++) {
+                        if ($scope.intermediateResults[resIndex].config.parameters[i] != null) {
+                            if (i === 0) {
+                                $scope.wizardQuery[resIndex + 1] += $scope.intermediateResults[resIndex].config.parameters[i];
+                            } else {
+                                $scope.wizardQuery[resIndex + 1] += "," + $scope.intermediateResults[resIndex].config.parameters[i];
+                            }
+                        }
+                    }
+                    $scope.wizardQuery[resIndex + 1] += ")";
+                    console.log("query part" + resIndex + ":" + $scope.wizardQuery[resIndex + 1]);
+                }
+                // generate the query
+                var query = "";
+                if(endIndex === -1){
+                    // if endIndex equals -1, generate the whole query
+                    for(var i = 0; i < $scope.wizardQuery.length; i++){
+                        query +=  $scope.wizardQuery[i];
+                    }
+                }else{
+                    // else only generate the query until the end index
+                    if(endIndex <=  $scope.wizardQuery.length) {
+                        for (var i = 0; i <= endIndex; i++) {
+                            query += $scope.wizardQuery[i];
+                        }
+                    }else{
+                        for(var i = 0; i < $scope.wizardQuery.length; i++){
+                            query +=  $scope.wizardQuery[i];
+                        }
+                    }
+                }
+                console.log("query:" + query);
+                return query;
+            }
+
+            // this function is used to update when an existing parameter changes
+            function updateParameter(resIndex){
+                console.log("update parameter " + resIndex + ": " + $scope.intermediateResults[resIndex].config.parameters);
+                // update all the intermediate result afterwards
+                var error = false;
+                for(var i = resIndex; i < $scope.intermediateResults.length; i++){
+                    var query = ""
+                    if(i === resIndex) {
+                        // update the parameters
+                        query = generateQuery(i, i + 1);
+                    }else if($scope.intermediateResults.selectedFunction != null){
+                        // re-generate the following intermediate results
+                        // when they have a selected function
+                        query = generateQuery(-1, i + 1);
+                    }
+                    $scope.wizard({expression: query}).then(function (result) {
+                        error = updateIntermediateResult(result, resIndex);
+                    }, function (result) {
+                        error = updateIntermediateResult(result, resIndex);
+                    });
+
+                    if(error === true){
+                        break;
+                    }
+                }
+            }
+
+            // this function is usd to update an intermediate result
+            function updateIntermediateResult(result, resIndex){
+                console.log(result);
+                if(result.statusCode >= 400) {
+                    $scope.intermediateResults[resIndex].wizardError = result.message;
+                    return true;
+                }else {
+                    if ($scope.intermediateResults[resIndex].wizardError != null) {
+                        $scope.intermediateResults[resIndex].wizardError = null
+                    }
+                    if($scope.intermediateResults[resIndex + 1] != null){
+                        $scope.intermediateResults[resIndex + 1].type = result.type.fullname;
+                        $scope.intermediateResults[resIndex + 1].preview = result.value;
+                    }
+                    return false;
+                }
+            }
+
+            // this function is used set a new intermediate result
+            function setNewIntermediateResult(result, index){
+                console.log("set new intermediate result");
                 // when there is an error
                 if(result.statusCode >= 400){
                     if($scope.intermediateResults[index + 1] != null){
                         $scope.intermediateResults.splice(-1, 1);
                     }
-                    $scope.wizardError = result.message;
+                    $scope.intermediateResults[index].wizardError = result.message;
                 }else { // no error
-                    if($scope.wizardError != null){
-                        $scope.wizardError = null
+                    if($scope.intermediateResults[index].wizardError != null){
+                        $scope.intermediateResults[index].wizardError = null
                     }
-                    // PROBLEM!!!!!
-                    // it doesn't generate the following selected functions
                     $scope.intermediateResults[index + 1] = {
                         type: result.type.fullname,
                         preview: result.value
                     };
                     if (result.type.fullname === "Number") {
                         $scope.endOfWizard = true;
-                    }else{
+                    } else {
                         $scope.endOfWizard = false;
                     }
+
                 }
             }
             /*
