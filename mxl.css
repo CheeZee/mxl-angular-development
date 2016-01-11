@@ -246,4 +246,25 @@
     border-bottom: 1px solid #ddd;
 }
 
+#selectedEntity{
+    position: relative;
+    background-color: #2b931f;
+    padding: 5px 5px;
+}
+
+#selectedEntity h4{
+    color: WHITE;
+}
+
+#selectedEntity span {
+    color: #9d9d9d;
+    position: absolute;
+    top: 2px;
+    right: 5px;
+    font-size: 5px;
+}
+
+#selectedEntity span:hover{
+    cursor: pointer;
+}
 

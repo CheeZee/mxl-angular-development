@@ -38,14 +38,18 @@
                 </div>
                 <div class="selection" ng-hide="selectedEntity == null || changingEntity">
                     <div class="row row-margin">
-                        <div class="col-md-8">
-                            <h4>You have selected <b>{{selectedEntity.name}}</b>.</h4>
+                        <div class="col-md-1"></div>
+                        <div class="col-md-5">
+                            <h4>You have selected</h4>
                         </div>
+
                         <div class="col-md-4">
-                            <button class="btn btn-default" type="button" ng-click="changeEntity()">
-                                Change<i class="glyphicon glyphicon-pencil"></i>
-                            </button>
+                            <div id="selectedEntity">
+                                <h4><b>{{selectedEntity.name}}</b></h4>
+                                <span ng-click="changeEntity()"><i class="glyphicon glyphicon-remove "></i></span>
+                            </div>
                         </div>
+                        <div class="col-md-2"></div>
                     </div>
                 </div>
                 <div id="main-wizard" ng-hide="intermediateResults == null">
