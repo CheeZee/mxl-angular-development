@@ -1,30 +1,54 @@
-<div class="row intermediate">
-    <div class="col-md-12 intermediate">
-        <div class="panel panel-default intermediate">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    <span class="pull-left"><i class="glyphicon glyphicon-arrow-down glyphicon-large"></i></span>
-                    Data Type: <b>{{ result.type }}</b>
-                    <a class="pull-right collapsed" data-toggle="collapse" data-target="#preview-{{$index}}">
-                        <b>Preview</b>
-                    </a>
-                </h3>
+<div class="row intermediate selection">
+    <div ng-if="result.wizardError == null">
+        <div class="col-md-1 col-md-offset-1 inter-info">
+            <div class="arrow pull-right">
+                <span><i class="glyphicon glyphicon-arrow-down"></i></span>
             </div>
-            <div id="preview-{{$index}}" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <div ng-if="result.type.lastIndexOf('Sequence', 0) === 0">
-                        <ul>
-                            <li  ng-repeat="item in result.preview | limitTo: 5">
-                                <span ng-if="item.name">{{ item.name }}</span>
-                                <span ng-if="!item.name">{{item}}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div ng-if="result.type === 'Number'">
-                        {{ result.preview }}
-                    </div>
+        </div>
+        <div class="col-md-10 intermediate">
+            <div class="panel panel-default intermediate">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
 
+                        Data Type: <b>{{ result.type }}</b>
+                        <a class="pull-right collapsed" data-toggle="collapse" data-target="#preview-{{$index}}">
+                            <b>Preview</b>
+                        </a>
+                    </h3>
                 </div>
+                <div id="preview-{{$index}}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div ng-if="result.type.lastIndexOf('Sequence', 0) === 0">
+                            <ul>
+                                <li  ng-repeat="item in result.preview | limitTo: 5">
+                                    <span ng-if="item.name">{{ item.name }}</span>
+                                    <span ng-if="!item.name">{{item}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div ng-if="result.type === 'Number'">
+                            {{ result.preview }}
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="result.wizardError != null">
+        <div class="col-md-1 col-md-offset-1 inter-info">
+            <div class="error pull-right">
+                <span><i class="glyphicon glyphicon-warning-sign"></i></span>
+            </div>
+        </div>
+        <div class="col-md-10 intermediate">
+            <div class="panel panel-default intermediate">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <p>{{result.wizardError}}</p>
+                    </h3>
+                </div>
+
             </div>
         </div>
     </div>

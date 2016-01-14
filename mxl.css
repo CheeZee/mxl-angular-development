@@ -209,7 +209,7 @@
 }
 
 .selection, #pro-editor{
-    background-color: #E2F7D1;
+    background-color: #eee;
 }
 
 .selection{
@@ -248,7 +248,7 @@
 
 #selectedEntity{
     position: relative;
-    background-color: #2b931f;
+    background-color: #666;
     padding: 5px 5px;
 }
 
@@ -268,3 +268,41 @@
     cursor: pointer;
 }
 
+.panel-default > .panel-heading{
+    background-image: none;
+    background-color: #bbb;
+    text-align: center;
+}
+
+.inter-info{
+    padding: 0;
+}
+.arrow{
+    background-color: #5cb85c;
+    height: 37px;
+    text-align: center;
+    width: 39px;
+    margin-top: 1px;
+}
+
+.arrow span {
+    font-size: 25px;
+    vertical-align: middle;
+    line-height: 38px;
+    margin-left: 0;
+}
+
+.error{
+    background-color: red;
+    height: 37px;
+    text-align: center;
+    width: 39px;
+    margin-top: 1px;
+}
+
+.error span {
+    font-size: 25px;
+    vertical-align: middle;
+    line-height: 38px;
+    margin-left: 0;
+}

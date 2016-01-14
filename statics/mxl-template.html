@@ -19,10 +19,10 @@
                 <div class="selection" ng-show="selectedEntity == null || changingEntity">
                     <div class="row row-margin">
                         <div class="col-md-7">
-                            <select id="entity" class="form-control">
-                                <option selected>--Please select an entity--</option>
-                                <option ng-repeat="entity in entities" value="{{$index}}">{{entity.name}}</option>
-                            </select>
+                            <input id="entity" list="entities" class="form-control">
+                            <datalist id="entities">
+                                <option ng-repeat="entity in entities" value="{{entity.name}}">
+                            </datalist>
                         </div>
                         <div class="col-md-2">
                             <button class="btn btn-default" type="button" ng-click="selectEntity()">

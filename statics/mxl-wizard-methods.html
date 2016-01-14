@@ -1,18 +1,17 @@
 <div class="row row-margin">
     <div class="col-md-12">
-        <select id="method-{{$index}}" class="form-control"
-                ng-model="result.config.selectedFunction"
-                ng-change="selectFunction($index)"
-                ng-options="function.name for function in result.functions">
-            <option value=""> --Please select a method--</option>
-        </select>
+        <input id="method-{{$index}}" class="form-control" list="functions-{{$index}}"
+               ng-keypress="selectFunction($event, $index)">
+        <datalist id="functions-{{$index}}">
+            <option ng-repeat="function in result.functions" value="{{function.name}}"></option>
+        </datalist>
     </div>
 </div>
 <div id="parameters-{{$index}}" ng-repeat="parameter in result.config.selectedFunction.parameters">
     <div class="row row-margin" ng-if="parameter.isOptional == false" >
         <div class="col-md-12">
             <div class="form-group" ng-class="{'has-error' : !result.config.parameters[$index] }" >
-                <label class="control-label" for="parameter-{{$index}}"><b>Mandatory</b> Parameter</label>
+                <label class="control-label" for="parameter-{{$index}}"><b>Mandatory</b> Parameter: {{parameter.name}}</label>
                 <input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
                        ng-model="result.config.parameters[$index]"
                        ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">
@@ -22,7 +21,7 @@
     <div class="row row-margin" ng-if="parameter.isOptional == true">
         <div class="col-md-12">
             <div class="form-group" >
-                <label class="control-label" for="parameter-{{$index}}"><b>Optional</b> Parameter</label>
+                <label class="control-label" for="parameter-{{$index}}"><b>Optional</b> Parameter: {{parameter.name}}</label>
                 <input id="parameter-{{$index}}" type="text" class="form-control" placeholder="Name: {{parameter.name}}, Type: {{parameter.type}}"
                        ng-model="result.config.parameters[$index]"
                        ng-keypress="setParameter($event, intermediateResults.indexOf(result), $index, parameter.isOptional)">
